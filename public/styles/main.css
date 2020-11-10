@@ -1,0 +1,50 @@
+body {
+    background: #DDDDDD;
+}
+
+.navbar {
+    background-color: blue;
+    color: white;
+}
+
+.page-container {
+    margin-top: 75px;
+}
+
+#draerButton{
+    color: white;
+}
+
+.dropdown-menu-right{
+    left: -128px;
+}
+
+#subTitle{
+    text-align: center;
+    font-size: 50px;
+}
+
+#logInButton,
+#createAccountButton,
+#steamLogInButton,
+#searchButton{
+    background-color: blue;
+    color: white;
+    margin-left: 1000px;
+}
+
+#forgetButton,
+#newAccountButton,
+#logInJumpButton{
+    color: black;
+}
+
+.bmd-layout-content{
+    height: 100vh;
+}
+
+.card{
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
+}
