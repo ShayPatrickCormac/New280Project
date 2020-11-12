@@ -1,6 +1,7 @@
 // 用rhit.getDeals() 可以拿到10个打折游戏 但目前不知道是怎么选的
 // rhit.get64bitId会自动拿到用户总游戏时长，用户名称和用户游戏库存
 var rhit = rhit || {};
+rhit.GAMETITLE = "";
 // const appid = require("appid");
 
 
@@ -116,14 +117,18 @@ rhit.appIdConversionHandler = function () {
 		console.log(gameNameArr);
 		// 这里拿到的是游戏的plain，不是游戏名 需要更新
 		const newList = htmlToElement('<div id="gameListContainer"></div>');
-		for(let i = 0; i< gameNameArr.length; i++){
+		for (let i = 0; i < gameNameArr.length; i++) {
 			const newCard = rhit.createCardTitleOnly(gameNameArr[i]);
+			newCard.onclick = (event) => {
+				window.location.href = `/gameDetailPage.html?id=${gameNameArr[i]}`;
+				rhit.GAMETITLE = gameNameArr[i];
+			};
 			newList.appendChild(newCard);
 		}
 		const oldList = document.querySelector("#gameLibTitle");
-			// oldList.removeAttribute("id");
-			oldList.hidden = true;
-			oldList.parentElement.appendChild(newList);
+		// oldList.removeAttribute("id");
+		oldList.hidden = true;
+		oldList.parentElement.appendChild(newList);
 	}
 }
 
@@ -163,12 +168,16 @@ rhit.searchHandler = function () {
 			console.log(`${result[i].title}`);
 			// 用result[i].plain来拿到一个游戏的plain，然后用plain来拿到价格，存愿望单的话把plain和title都扔进去方便之后调用
 			const newCard = rhit.createCardTitleOnly(result[i].title);
+			newCard.onclick = (event) => {
+				window.location.href = `/gameDetailPage.html?id=${result[i].title}`;
+				rhit.GAMETITLE = result[i].title;
+			};
 			newList.appendChild(newCard);
 		}
 		const oldList = document.querySelector("#searchResult");
-			// oldList.removeAttribute("id");
-			oldList.hidden = true;
-			oldList.parentElement.appendChild(newList);
+		// oldList.removeAttribute("id");
+		oldList.hidden = true;
+		oldList.parentElement.appendChild(newList);
 	}
 }
 
@@ -213,6 +222,11 @@ rhit.getDeals = function () {
 				// outputList.push(result[i].title);
 				// console.log(outputList);
 				const newCard = rhit.createCard(result[i].title, result[i].price_new, result[i].price_cut);
+				newCard.onclick = (event) => {
+					window.location.href = `/gameDetailPage.html?id=${result[i].title}`;
+					rhit.GAMETITLE = result[i].title;
+					console.log("gametitle:",rhit.GAMETITLE);
+				};
 				newList.appendChild(newCard);
 			}
 			const oldList = document.querySelector("#saleTitle");
@@ -258,6 +272,24 @@ rhit.createCardTitleOnly = function (gameName) {
   </div>`);
 }
 
+rhit.GameDetailPageController = class {
+	constructor(title) {
+		this.gameName = title;
+		this.updateView();
+	}
+
+	updateView() {
+		console.log("Here!!!");
+		console.log(document.querySelector("#gameTitle").innerHTML);
+		console.log(rhit.GAMETITLE);
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		const gameT = urlParams.get("id");
+		this.gameName = gameT;
+		document.querySelector("#gameTitle").innerHTML = this.gameName;
+	}
+}
+
 rhit.SalePageController = class {
 	constructor() {
 		this.updateView();
@@ -298,30 +330,30 @@ rhit.ProfilePageController = class {
 }
 
 rhit.SearchPageController = class {
-	constructor(){
-		
+	constructor() {
+
 		this.updateView();
 	}
 
-	updateView(){
+	updateView() {
 		console.log("You are on search Page");
-		document.querySelector("#searchButton").onclick = (event)=>{
+		document.querySelector("#searchButton").onclick = (event) => {
 			const inputGameName = document.querySelector("#gameTitleInput").value;
 			rhit.searchGames(inputGameName);
 		}
-		
+
 	}
 }
 
 rhit.GameLibPageController = class {
-	constructor(){
+	constructor() {
 		this.updateView();
 	}
 
-	updateView(){
-		if(!rhit.fbAuthManager.isSignedIn){
+	updateView() {
+		if (!rhit.fbAuthManager.isSignedIn) {
 			document.querySelector("#gameLibTitle").innerHTML = "You are not signed in!";
-		}else{
+		} else {
 			rhit.get64BitId(895713836);
 		}
 	}
@@ -398,6 +430,11 @@ rhit.initializePage = function () {
 	if (document.querySelector("#gameLibPage")) {
 		console.log("You are on the gameLib page");
 		new rhit.GameLibPageController();
+	}
+
+	if (document.querySelector("#gameDetailPage")) {
+		console.log("You are on the gameDetail page");
+		new rhit.GameDetailPageController();
 	}
 
 	if (document.querySelector("#loginPage")) {
