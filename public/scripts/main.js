@@ -333,24 +333,24 @@ rhit.FbAuthManager = class {
 	}
 	beginListening(changeListener) {
 		firebase.auth().onAuthStateChanged((user) => {
-			var displayName = user.displayName;
-			var email = user.email;
-			var photoURL = user.photoURL;
-			const phoneNumber = user.phoneNumber;
-			var isAnonymous = user.isAnonymous;
-			var uid = user.uid;
+			// var displayName = user.displayName;
+			// var email = user.email;
+			// var photoURL = user.photoURL;
+			// const phoneNumber = user.phoneNumber;
+			// var isAnonymous = user.isAnonymous;
+			// var uid = user.uid;
 
-			console.log("The use is signed in ", uid);
-			console.log('displayName :>> ', displayName);
-			console.log('email :>> ', email);
-			console.log('photoURL :>> ', photoURL);
-			console.log('phoneNumber :>> ', phoneNumber);
-			console.log('isAnonymous :>> ', isAnonymous)
+			// console.log("The use is signed in ", uid);
+			// console.log('displayName :>> ', displayName);
+			// console.log('email :>> ', email);
+			// console.log('photoURL :>> ', photoURL);
+			// console.log('phoneNumber :>> ', phoneNumber);
+			// console.log('isAnonymous :>> ', isAnonymous)
 			this._user = user;
 			changeListener();
 			//const uid = this._user.uid;
-			// const inputEmailEl = document.querySelector("#inputEmail");
-			// const inputPasswordEl = document.querySelector("#inputPassword");
+			const inputEmailEl = document.querySelector("#inputEmail");
+			const inputPasswordEl = document.querySelector("#inputPassword");
 		});
 	}
 
@@ -400,8 +400,14 @@ rhit.initializePage = function () {
 		new rhit.GameLibPageController();
 	}
 
+	if (document.querySelector("#loginPage")) {
+		console.log("You are on the login page");
+	}
+
 	if (document.querySelector("#createAccountButton") != null) {
 		document.querySelector("#createAccountButton").onclick = (event) => {
+			const inputEmailEl = document.querySelector("#inputEmail");
+			const inputPasswordEl = document.querySelector("#inputPassword");
 			console.log(`Create account for email: ${inputEmailEl.value} password: ${inputPasswordEl.value}`);
 
 			firebase.auth().createUserWithEmailAndPassword(inputEmailEl.value, inputPasswordEl.value).catch(function (error) {
@@ -415,6 +421,8 @@ rhit.initializePage = function () {
 	}
 	if (document.querySelector("#logInButton") != null) {
 		document.querySelector("#logInButton").onclick = (event) => {
+			const inputEmailEl = document.querySelector("#inputEmail");
+			const inputPasswordEl = document.querySelector("#inputPassword");
 			console.log(`Log in for email: ${inputEmailEl.value} password: ${inputPasswordEl.value}`);
 
 			firebase.auth().signInWithEmailAndPassword(inputEmailEl.value, inputPasswordEl.value).catch(function (error) {
@@ -470,10 +478,10 @@ rhit.initializePage = function () {
 }
 
 rhit.checkForRedirects = function () {
-	if (document.querySelector("#mainPage") && rhit.fbAuthManager.isSignedIn) {
+	if (document.querySelector("#loginPage") && rhit.fbAuthManager.isSignedIn) {
 		window.location.href = "/profilePage.html";
 	}
-	if (!document.querySelector("#mainPage") && !rhit.fbAuthManager.isSignedIn) {
+	if (!document.querySelector("#loginPage") && !rhit.fbAuthManager.isSignedIn) {
 		window.location.href = "/";
 	}
 };
