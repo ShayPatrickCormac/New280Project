@@ -481,6 +481,9 @@ rhit.checkForRedirects = function () {
 	if (document.querySelector("#loginPage") && rhit.fbAuthManager.isSignedIn) {
 		window.location.href = "/profilePage.html";
 	}
+	if (document.querySelector("#registerPage") && rhit.fbAuthManager.isSignedIn) {
+		window.location.href = "/profilePage.html";
+	}
 	if (document.querySelector("#gameLibPage") && !rhit.fbAuthManager.isSignedIn) {
 		window.location.href = "/";
 	}
