@@ -272,7 +272,47 @@ rhit.createCardTitleOnly = function (gameName) {
   </div>`);
 }
 
-rhit.FbGameInfoManager = class {
+
+
+rhit.GameDetailPageController = class {
+	constructor(title) {
+		this.gameName = title;
+		this.updateView();
+	}
+
+	updateView() {
+		console.log("Here!!!");
+		console.log(document.querySelector("#gameTitle").innerHTML);
+		console.log(rhit.GAMETITLE);
+		const queryString = window.location.search;
+		const urlParams = new URLSearchParams(queryString);
+		const gameT = urlParams.get("id");
+		this.gameName = gameT;
+		document.querySelector("#gameTitle").innerHTML = this.gameName;
+
+		//let gameManager = new FbGameInfoManager(this.gameName);
+		//gameManager.beginListening(this.updateView.bind(this));
+		console.log("call  getdata");
+		this.getFBData();
+	}
+
+	getFBData() {
+		var docRef = firebase.firestore().collection("GameInfo");
+
+		docRef.get().then(function (doc) {
+			if (doc.exists) {
+				console.log("Document data:", doc.data());
+			} else {
+				// doc.data() will be undefined in this case
+				console.log("No such document!");
+			}
+		}).catch(function (error) {
+			console.log("Error getting document:", error);
+		});
+	}
+}
+
+/*rhit.FbGameInfoManager = class {
 	constructor(gameTitle) {
 		this.gameTitle = gameTitle;
 		this._documentSnapshots = [];
@@ -301,27 +341,7 @@ rhit.FbGameInfoManager = class {
 	get length() {
 		return this._documentSnapshots.length;
 	}
-}
-
-rhit.GameDetailPageController = class {
-	constructor(title) {
-		this.gameName = title;
-		this.updateView();
-	}
-
-	updateView() {
-		console.log("Here!!!");
-		console.log(document.querySelector("#gameTitle").innerHTML);
-		console.log(rhit.GAMETITLE);
-		const queryString = window.location.search;
-		const urlParams = new URLSearchParams(queryString);
-		const gameT = urlParams.get("id");
-		this.gameName = gameT;
-		document.querySelector("#gameTitle").innerHTML = this.gameName;
-		let gameManager = new FbGameInfoManager(this.gameName);
-		gameManager.beginListening(this.updateView.bind(this));
-	}
-}
+}*/
 
 rhit.SalePageController = class {
 	constructor() {
