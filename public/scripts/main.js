@@ -222,11 +222,11 @@ rhit.getDeals = function () {
 				// outputList.push(result[i].title);
 				// console.log(outputList);
 				const newCard = rhit.createCard(result[i].title, result[i].price_new, result[i].price_cut);
-				newCard.onclick = (event) => {
-					window.location.href = `/gameDetailPage.html?id=${result[i].title}`;
-					rhit.GAMETITLE = result[i].title;
-					console.log("gametitle:",rhit.GAMETITLE);
-				};
+				// newCard.onclick = (event) => {
+				// 	window.location.href = `/gameDetailPage.html?id=${result[i].title}`;
+				// 	rhit.GAMETITLE = result[i].title;
+				// 	console.log("gametitle:",rhit.GAMETITLE);
+				// };
 				newList.appendChild(newCard);
 			}
 			const oldList = document.querySelector("#saleTitle");
@@ -272,6 +272,37 @@ rhit.createCardTitleOnly = function (gameName) {
   </div>`);
 }
 
+rhit.FbGameInfoManager = class {
+	constructor(gameTitle) {
+		this.gameTitle = gameTitle;
+		this._documentSnapshots = [];
+		this._ref = firebase.firestore().collection("GameInfo");
+		this._unsubscribe = null;
+	}
+	
+	beginListening(changeListener) {
+		let query = this._ref.orderBy("Title", "desc").limit(50);
+		if (this.gameTitle) {
+			query = query.where("Title", "==", this.gameTitle);
+			console.log(query);
+		}
+		this._unsubscribe = query.onSnapshot((querySnapshot) => {
+
+			this._documentSnapshots = querySnapshot.docs;
+			// querySnapshot.forEach((doc) => {
+			// 	console.log(doc.data());
+			// });
+			changeListener();
+		});
+	}
+	stopListening() {
+		this._unsubscribe();
+	}
+	get length() {
+		return this._documentSnapshots.length;
+	}
+}
+
 rhit.GameDetailPageController = class {
 	constructor(title) {
 		this.gameName = title;
@@ -287,6 +318,8 @@ rhit.GameDetailPageController = class {
 		const gameT = urlParams.get("id");
 		this.gameName = gameT;
 		document.querySelector("#gameTitle").innerHTML = this.gameName;
+		let gameManager = new FbGameInfoManager(this.gameName);
+		gameManager.beginListening(this.updateView.bind(this));
 	}
 }
 
