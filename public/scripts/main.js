@@ -223,6 +223,75 @@ rhit.getGamePrice = function (plain) {
 	xhr.send();
 }
 
+rhit.getGamePriceUK = function (plain) {
+	const apiKey = "954b60b5fba629274ca717b3fbc5eafba5de26bd";
+	const proxyurl = "https://cors-anywhere.herokuapp.com/";
+	const url = `https://api.isthereanydeal.com/v01/game/prices/?key=${apiKey}&plains=${plain}&region=uk&country=GB&shops=steam%2Cgog&exclude=voidu%2Citchio&added=0`;
+	const url2 = proxyurl + url;
+	var xhr = new XMLHttpRequest();
+	xhr.addEventListener("load", (event) => {
+		console.log("aaa");
+		console.log(event.target);
+		console.log(plain);
+		if (event.target.status == 200) {
+			console.log("Price success");
+			const result = event.target.response.data[plain].list;
+			for (let i = 0; i < result.length; i++) {
+				console.log(`store: ${result[i].shop.name}. Current Price: ${result[i].price_new}. Original Price: ${result[i].price_old}`);
+			}
+		}
+	});
+	xhr.responseType = "json";
+	xhr.open("GET", url2);
+	xhr.send();
+}
+
+rhit.getGamePriceAU = function (plain) {
+	const apiKey = "954b60b5fba629274ca717b3fbc5eafba5de26bd";
+	const proxyurl = "https://cors-anywhere.herokuapp.com/";
+	const url = `https://api.isthereanydeal.com/v01/game/prices/?key=${apiKey}&plains=${plain}&region=au&country=AU&shops=steam%2Cgog&exclude=voidu%2Citchio&added=0`;
+	const url2 = proxyurl + url;
+	var xhr = new XMLHttpRequest();
+	xhr.addEventListener("load", (event) => {
+		console.log("aaa");
+		console.log(event.target);
+		console.log(plain);
+		if (event.target.status == 200) {
+			console.log("Price success");
+			const result = event.target.response.data[plain].list;
+			for (let i = 0; i < result.length; i++) {
+				console.log(`store: ${result[i].shop.name}. Current Price: ${result[i].price_new}. Original Price: ${result[i].price_old}`);
+			}
+		}
+	});
+	xhr.responseType = "json";
+	xhr.open("GET", url2);
+	xhr.send();
+}
+
+rhit.getGamePrice = function (plain) {
+	const apiKey = "954b60b5fba629274ca717b3fbc5eafba5de26bd";
+	const proxyurl = "https://cors-anywhere.herokuapp.com/";
+	const url = `https://api.isthereanydeal.com/v01/game/prices/?key=${apiKey}&plains=${plain}&region=us&country=US&shops=steam%2Cgog&exclude=voidu%2Citchio&added=0`;
+	const url2 = proxyurl + url;
+	var xhr = new XMLHttpRequest();
+	xhr.addEventListener("load", (event) => {
+		console.log("aaa");
+		console.log(event.target);
+		console.log(plain);
+		if (event.target.status == 200) {
+			console.log("Price success");
+			const result = event.target.response.data[plain].list;
+			for (let i = 0; i < result.length; i++) {
+				console.log(`store: ${result[i].shop.name}. Current Price: ${result[i].price_new}. Original Price: ${result[i].price_old}`);
+			}
+		}
+	});
+	xhr.responseType = "json";
+	xhr.open("GET", url2);
+	xhr.send();
+}
+
 rhit.getDeals = function () {
 	const apiKey = "954b60b5fba629274ca717b3fbc5eafba5de26bd";
 	const proxyurl = "https://cors-anywhere.herokuapp.com/";
