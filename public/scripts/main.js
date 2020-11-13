@@ -736,6 +736,17 @@ rhit.initializePage = function () {
 		new rhit.WishlistPageController();
 	}
 
+	if (document.querySelector("#signOutButton") != null) {
+		document.querySelector("#signOutButton").onclick = (event) => {
+			if(rhit.fbAuthManager.isSignedIn){
+				window.location.href = "/";
+				firebase.auth().signOut();
+				console.log("sign out!!!!");
+				
+			}
+		};
+	}
+
 	if (document.querySelector("#createAccountButton") != null) {
 		document.querySelector("#createAccountButton").onclick = (event) => {
 			const inputEmailEl = document.querySelector("#inputEmail");
@@ -749,8 +760,8 @@ rhit.initializePage = function () {
 				console.log("Create Error", errorCode, errorMessage);
 			});
 		};
-
 	}
+
 	if (document.querySelector("#logInButton") != null) {
 		document.querySelector("#logInButton").onclick = (event) => {
 			const inputEmailEl = document.querySelector("#inputEmail");
