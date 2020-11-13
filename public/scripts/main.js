@@ -211,11 +211,14 @@ rhit.getGamePrice = function (plain) {
 		console.log(event.target);
 		console.log(plain);
 		if (event.target.status == 200) {
-			console.log("Price success");
+			console.log("Price success US");
 			const result = event.target.response.data[plain].list;
 			for (let i = 0; i < result.length; i++) {
 				console.log(`store: ${result[i].shop.name}. Current Price: ${result[i].price_new}. Original Price: ${result[i].price_old}`);
+				document.querySelector("#gameUSPrice").innerHTML = "Country: US, Current Price: " + result[i].price_new + ", Original Price: " + result[i].price_old;
 			}
+		}else {
+			document.querySelector("#gameUSPrice").innerHTML = "Not available in US";
 		}
 	});
 	xhr.responseType = "json";
@@ -234,11 +237,14 @@ rhit.getGamePriceUK = function (plain) {
 		console.log(event.target);
 		console.log(plain);
 		if (event.target.status == 200) {
-			console.log("Price success");
+			console.log("Price success UK");
 			const result = event.target.response.data[plain].list;
 			for (let i = 0; i < result.length; i++) {
 				console.log(`store: ${result[i].shop.name}. Current Price: ${result[i].price_new}. Original Price: ${result[i].price_old}`);
+				document.querySelector("#gameUKPrice").innerHTML = "Country: UK, Current Price: " + result[i].price_new + ", Original Price: " + result[i].price_old;
 			}
+		} else {
+			document.querySelector("#gameUKPrice").innerHTML = "Not available in UK";
 		}
 	});
 	xhr.responseType = "json";
@@ -257,11 +263,14 @@ rhit.getGamePriceAU = function (plain) {
 		console.log(event.target);
 		console.log(plain);
 		if (event.target.status == 200) {
-			console.log("Price success");
+			console.log("Price success AU");
 			const result = event.target.response.data[plain].list;
 			for (let i = 0; i < result.length; i++) {
 				console.log(`store: ${result[i].shop.name}. Current Price: ${result[i].price_new}. Original Price: ${result[i].price_old}`);
+				document.querySelector("#gameAUPrice").innerHTML = "Country: AU, Current Price: " + result[i].price_new + ", Original Price: " + result[i].price_old;
 			}
+		} else {
+			document.querySelector("#gameAUPrice").innerHTML = "Not available in AU";
 		}
 	});
 	xhr.responseType = "json";
@@ -280,11 +289,14 @@ rhit.getGamePrice = function (plain) {
 		console.log(event.target);
 		console.log(plain);
 		if (event.target.status == 200) {
-			console.log("Price success");
+			console.log("Price success US");
 			const result = event.target.response.data[plain].list;
 			for (let i = 0; i < result.length; i++) {
 				console.log(`store: ${result[i].shop.name}. Current Price: ${result[i].price_new}. Original Price: ${result[i].price_old}`);
+				document.querySelector("#gameUSPrice").innerHTML = "Country: US, Current Price: " + result[i].price_new + ", Original Price: " + result[i].price_old;
 			}
+		}else {
+			document.querySelector("#gameUSPrice").innerHTML = "Not available in US";
 		}
 	});
 	xhr.responseType = "json";
@@ -410,6 +422,10 @@ rhit.GameDetailPageController = class {
 					console.error("Error adding document: ", error);
 				});
 		}
+
+		rhit.getGamePrice(gamePlain);
+		rhit.getGamePriceUK(gamePlain);
+		rhit.getGamePriceAU(gamePlain);
 	}
 
 	getFBData() {

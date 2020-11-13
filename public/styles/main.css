@@ -10,7 +10,11 @@ body {
 .page-container {
     margin-top: 75px;
 }
-
+#gameDetailContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 #draerButton{
     color: white;
 }
