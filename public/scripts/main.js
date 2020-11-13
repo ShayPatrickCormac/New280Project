@@ -120,7 +120,7 @@ rhit.appIdConversionHandler = function () {
 		for (let i = 0; i < gameNameArr.length; i++) {
 			const newCard = rhit.createCardTitleOnly(gameNameArr[i]);
 			newCard.onclick = (event) => {
-				window.location.href = `/gameDetailPage.html?id=${gameNameArr[i]}`;
+				window.location.href = `/gameDetailPage.html?id=${gameNameArr[i]}&plain=${gameNameArr[i]}&appId=${10}`;
 				rhit.GAMETITLE = gameNameArr[i];
 			};
 			newList.appendChild(newCard);
@@ -188,7 +188,7 @@ rhit.searchHandler = function () {
 			const newCard = rhit.createCardTitleAndImage(result[i].title, url);
 			// const newCard = rhit.createCardTitleAndImage(result[i].title, rhit.getImageForGame(docRef.appId));
 			newCard.onclick = (event) => {
-				window.location.href = `/gameDetailPage.html?id=${result[i].title}`;
+				window.location.href = `/gameDetailPage.html?id=${result[i].title}&plain=${result[i].plain}&appId=${"10"}`;
 				rhit.GAMETITLE = result[i].title;
 			};
 			newList.appendChild(newCard);
@@ -242,7 +242,7 @@ rhit.getDeals = function () {
 				// console.log(outputList);
 				const newCard = rhit.createCard(result[i].title, result[i].price_new, result[i].price_cut);
 				newCard.onclick = (event) => {
-					window.location.href = `/gameDetailPage.html?id=${result[i].title}`;
+					window.location.href = `/gameDetailPage.html?id=${result[i].title}&plain=${result[i].plain}`;
 					rhit.GAMETITLE = result[i].title;
 					console.log("gametitle:",rhit.GAMETITLE);
 				};
@@ -275,7 +275,7 @@ rhit.getImageForGame = function (appId) {
 
 rhit.createCard = function (gameName, gamePrice, discount) {
 	return htmlToElement(`<div class="card">
-	<img class="card-img-left" src="..." alt="Card image cap">
+	<img class="card-img-left" src=${rhit.getImageForGame(10)} alt="Card image cap">
 	<div class="card-body">
 	  <p class="card-text">${gameName}&nbsp&nbsp&nbspPrice:&nbsp${gamePrice}&nbsp&nbsp&nbspDiscount:&nbsp${discount}%&nbspOFF!</p>
 	</div>
@@ -284,7 +284,7 @@ rhit.createCard = function (gameName, gamePrice, discount) {
 
 rhit.createCardTitleOnly = function (gameName) {
 	return htmlToElement(`<div class="card">
-	<img class="card-img-left" src="..." alt="Card image cap">
+	<img class="card-img-left" src=${rhit.getImageForGame(10)} alt="Card image cap">
 	<div class="card-body">
 	  <p class="card-text">${gameName}</p>
 	</div>
@@ -315,7 +315,11 @@ rhit.GameDetailPageController = class {
 		const queryString = window.location.search;
 		const urlParams = new URLSearchParams(queryString);
 		const gameT = urlParams.get("id");
+		const gamePlain = urlParams.get("plain");
+		const gameAppId = parseInt(urlParams.get("appId"));
+		console.log("appId for now", gameAppId);
 		this.gameName = gameT;
+		document.querySelector("#gameImg").src = rhit.getImageForGame(gameAppId);
 		document.querySelector("#gameTitle").innerHTML = this.gameName;
 
 		//let gameManager = new FbGameInfoManager(this.gameName);
@@ -328,7 +332,7 @@ rhit.GameDetailPageController = class {
 				Title: this.gameName,
 				appId: "10",
 				author: rhit.fbAuthManager.uid,
-				plain:""
+				plain:gamePlain
 			})
 			.then(function(docRef) {
 				console.log("Document written with ID: ", docRef.id);
@@ -507,6 +511,9 @@ rhit.WishlistPageController = class {
 					title = doc.data().Title;
 					plain = doc.data().plain;
 					newCard = rhit.createCardTitleAndImage(title, rhit.getImageForGame(appID));
+					newCard.onclick = (event)=>{
+						window.location.href = `/gameDetailPage.html?id=${title}&plain=${plain}&appId=${appID}`;
+					}
 				});
 				newList.appendChild(newCard);
 

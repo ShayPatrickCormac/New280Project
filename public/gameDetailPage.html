@@ -41,20 +41,23 @@
         <a id="steamLoginBar" class="list-group-item">Steam Login</a>
         <a id="userLoginBar" class="list-group-item">User Login</a>
         <a id="searchBar" class="list-group-item">Search</a>
+        <a id="saleBar" class="list-group-item">Game on sale</a>
+        <a id="gameLibBar" class="list-group-item">My Game Library</a>
       </ul>
     </div>
     <main class="bmd-layout-content">
       <div class="container">
         <div id="gameDetailPage" class="container page-container">
-          <div class="card">
-            <img class="card-img-left" src="..." alt="No image yet">
-          </div>
+          <!-- <div class="card"> -->
+          <img id="gameImg" class="card-img-left" src="..." alt="No image yet">
+          <!-- </div> -->
 
           <div id="gameTitle">Game Title</div>
           <div id="gamePrice">Price:</div>
           <div>
             <button id="addToWishListButton" type="button" class="btn btn-primary">Add to WishList</button>
-            <button id="allPriceButton" type="button" class="btn btn-primary" data-toggle="modal" data-target="#deleteQuoteDialog">All Price</button>
+            <button id="allPriceButton" type="button" class="btn btn-primary" data-toggle="modal"
+              data-target="#deleteQuoteDialog">All Price</button>
           </div>
         </div>
       </div>
