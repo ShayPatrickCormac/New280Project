@@ -58,22 +58,23 @@
           <div id="profileUsername">
             <label>Username:</label>
           </div>
-            <div class="switch">
-              <label>
-                <input type="checkbox" checked>
-                Recieve Email when game on WishList is on sale?
-              </label>
-            </div>
-        
+          <div class="switch">
+            <label>
+              <input type="checkbox" checked>
+              Recieve Email when game on WishList is on sale?
+            </label>
+          </div>
+
           <div>
-            <button id="linkSteamButton" type="button" class="btn btn-primary">Link Steam Account</button>
+            <button id="linkSteamButton" type="button" class="btn btn-primary" data-toggle="modal"
+              data-target="#linkSteamDialog">Link Steam Account</button>
             <button id="wishListButton" type="button" class="btn btn-primary">My WishList</button>
           </div>
-          
+
           <div id="firebaseui-auth-container"></div>
         </div>
       </div>
-      <div class="modal fade" id="registerDialog" tabindex="-1" role="dialog" aria-labelledby="Register dialog"
+      <!-- <div class="modal fade" id="registerDialog" tabindex="-1" role="dialog" aria-labelledby="Register dialog"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
@@ -85,8 +86,33 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
+
     </main>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="linkSteamDialog" tabindex="-1" role="dialog" aria-labelledby="Link Steam dialog"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Link your steam account</h5>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="inputId">Steam bit id</label>
+              <input type="text" class="form-control" id="inputId" placeholder="">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">CANCEL</button>
+          <button id="submitSteamId" type="button" class="btn btn-primary">SUBMIT</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script src="scripts/jquery.min.js"></script>

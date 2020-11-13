@@ -313,7 +313,7 @@ rhit.getDeals = function () {
 				newCard.onclick = (event) => {
 					window.location.href = `/gameDetailPage.html?id=${result[i].title}&plain=${result[i].plain}`;
 					rhit.GAMETITLE = result[i].title;
-					console.log("gametitle:",rhit.GAMETITLE);
+					console.log("gametitle:", rhit.GAMETITLE);
 				};
 				newList.appendChild(newCard);
 			}
@@ -396,19 +396,19 @@ rhit.GameDetailPageController = class {
 		console.log("call  getdata");
 		this.getFBData();
 
-		document.querySelector("#addToWishListButton").onclick = (event) =>{
+		document.querySelector("#addToWishListButton").onclick = (event) => {
 			firebase.firestore().collection("WishList").add({
 				Title: this.gameName,
 				appId: "10",
 				author: rhit.fbAuthManager.uid,
-				plain:gamePlain
+				plain: gamePlain
 			})
-			.then(function(docRef) {
-				console.log("Document written with ID: ", docRef.id);
-			})
-			.catch(function(error) {
-				console.error("Error adding document: ", error);
-			});
+				.then(function (docRef) {
+					console.log("Document written with ID: ", docRef.id);
+				})
+				.catch(function (error) {
+					console.error("Error adding document: ", error);
+				});
 		}
 	}
 
@@ -515,6 +515,19 @@ rhit.ProfilePageController = class {
 		document.querySelector("#wishListButton").onclick = (event) => {
 			window.location.href = `wishlistPage.html`;
 		};
+		document.querySelector("#submitSteamId").onclick = (event) => {
+			// Add a new document with a generated id.
+			firebase.firestore().collection("SteamAccount").add({
+				steamId: document.querySelector("#inputId").value,
+				uid: rhit.fbAuthManager.uid
+			})
+				.then(function (docRef) {
+					console.log("Document written with ID: ", docRef.id);
+				})
+				.catch(function (error) {
+					console.error("Error adding document: ", error);
+				});
+		};
 	}
 }
 
@@ -543,7 +556,28 @@ rhit.GameLibPageController = class {
 		if (!rhit.fbAuthManager.isSignedIn) {
 			document.querySelector("#gameLibTitle").innerHTML = "You are not signed in!";
 		} else {
-			rhit.get64BitId(895713836);
+			// rhit.get64BitId(895713836);
+
+			this._ref = firebase.firestore().collection("SteamAccount");
+			let query = this._ref.limit(50);
+			console.log("uid:", rhit.fbAuthManager.uid);
+			if (rhit.fbAuthManager.uid) {
+				console.log("should update query");
+				query = query.where("uid", "==", rhit.fbAuthManager.uid);
+			}
+			console.log("steamaccount:", this._ref);
+			console.log("query:", query);
+			query.get()
+				.then(function (querySnapshot) {
+					querySnapshot.forEach(function (doc) {
+						console.log(doc.id, " => ", doc.data());
+						var steamId = doc.data().steamId;
+						rhit.get64BitId(steamId);
+					});
+				})
+				.catch(function (error) {
+					console.log("Error getting documents: ", error);
+				});
 		}
 	}
 }
@@ -580,7 +614,7 @@ rhit.WishlistPageController = class {
 					title = doc.data().Title;
 					plain = doc.data().plain;
 					newCard = rhit.createCardTitleAndImage(title, rhit.getImageForGame(appID));
-					newCard.onclick = (event)=>{
+					newCard.onclick = (event) => {
 						window.location.href = `/gameDetailPage.html?id=${title}&plain=${plain}&appId=${appID}`;
 					}
 				});
