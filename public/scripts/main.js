@@ -241,11 +241,11 @@ rhit.getDeals = function () {
 				// outputList.push(result[i].title);
 				// console.log(outputList);
 				const newCard = rhit.createCard(result[i].title, result[i].price_new, result[i].price_cut);
-				// newCard.onclick = (event) => {
-				// 	window.location.href = `/gameDetailPage.html?id=${result[i].title}`;
-				// 	rhit.GAMETITLE = result[i].title;
-				// 	console.log("gametitle:",rhit.GAMETITLE);
-				// };
+				newCard.onclick = (event) => {
+					window.location.href = `/gameDetailPage.html?id=${result[i].title}`;
+					rhit.GAMETITLE = result[i].title;
+					console.log("gametitle:",rhit.GAMETITLE);
+				};
 				newList.appendChild(newCard);
 			}
 			const oldList = document.querySelector("#saleTitle");
@@ -322,6 +322,21 @@ rhit.GameDetailPageController = class {
 		//gameManager.beginListening(this.updateView.bind(this));
 		console.log("call  getdata");
 		this.getFBData();
+
+		document.querySelector("#addToWishListButton").onclick = (event) =>{
+			firebase.firestore().collection("WishList").add({
+				Title: this.gameName,
+				appId: "10",
+				author: rhit.fbAuthManager.uid,
+				plain:""
+			})
+			.then(function(docRef) {
+				console.log("Document written with ID: ", docRef.id);
+			})
+			.catch(function(error) {
+				console.error("Error adding document: ", error);
+			});
+		}
 	}
 
 	getFBData() {
