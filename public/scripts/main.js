@@ -167,7 +167,25 @@ rhit.searchHandler = function () {
 		for (let i = 0; i < result.length; i++) {
 			console.log(`${result[i].title}`);
 			// 用result[i].plain来拿到一个游戏的plain，然后用plain来拿到价格，存愿望单的话把plain和title都扔进去方便之后调用
-			const newCard = rhit.createCardTitleOnly(result[i].title);
+			// let appID = rhit.getFBData(result[i].plain);
+			let appId = 10;
+			var docRef = firebase.firestore().collection("GameInfo").doc(result[i].plain);
+			console.log(docRef);
+			docRef.get().then(function (doc) {
+				if (doc.exists) {
+					console.log("Document data:", doc.data());
+					appId = docRef.appId;
+				} else {
+					// doc.data() will be undefined in this case
+					console.log("No such document!");
+				}
+			}).catch(function (error) {
+				console.log("Error getting document:", error);
+			});
+			console.log("appid: ", appId);
+			const url = `http://cdn.akamai.steamstatic.com/steam/apps/${appId}/header.jpg`;
+			const newCard = rhit.createCardTitleAndImage(result[i].title, url);
+			// const newCard = rhit.createCardTitleAndImage(result[i].title, rhit.getImageForGame(docRef.appId));
 			newCard.onclick = (event) => {
 				window.location.href = `/gameDetailPage.html?id=${result[i].title}`;
 				rhit.GAMETITLE = result[i].title;
@@ -272,6 +290,15 @@ rhit.createCardTitleOnly = function (gameName) {
   </div>`);
 }
 
+rhit.createCardTitleAndImage = function (gameName, url) {
+	return htmlToElement(`<div class="card">
+	<img class="card-img-left" src=${url} alt="Card image cap">
+	<div class="card-body">
+	  <p class="card-text">${gameName}</p>
+	</div>
+  </div>`);
+}
+
 
 
 rhit.GameDetailPageController = class {
@@ -297,8 +324,8 @@ rhit.GameDetailPageController = class {
 	}
 
 	getFBData() {
-		var docRef = firebase.firestore().collection("GameInfo");
-
+		var docRef = firebase.firestore().collection("GameInfo").doc("assassinscreedodyssey");
+		console.log(docRef);
 		docRef.get().then(function (doc) {
 			if (doc.exists) {
 				console.log("Document data:", doc.data());
@@ -310,6 +337,23 @@ rhit.GameDetailPageController = class {
 			console.log("Error getting document:", error);
 		});
 	}
+}
+
+rhit.getFBData = function (plain) {
+	var docRef = firebase.firestore().collection("GameInfo").doc(plain);
+	console.log(docRef);
+	docRef.get().then(function (doc) {
+		if (doc.exists) {
+			console.log("Document data:", doc.data());
+		} else {
+			// doc.data() will be undefined in this case
+			console.log("No such document!");
+			return 10;
+		}
+	}).catch(function (error) {
+		console.log("Error getting document:", error);
+	});
+	return docRef.appId;
 }
 
 /*rhit.FbGameInfoManager = class {
