@@ -163,6 +163,7 @@ rhit.searchHandler = function () {
 	if (this.status == 200) {
 		console.log("Search success");
 		const result = this.response.data.results;
+		console.log(result);
 		const newList = htmlToElement('<div id="gameListContainer"></div>');
 		for (let i = 0; i < result.length; i++) {
 			console.log(`${result[i].title}`);
