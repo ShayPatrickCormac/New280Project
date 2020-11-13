@@ -424,6 +424,9 @@ rhit.ProfilePageController = class {
 		document.querySelector("#profileEmail").innerHTML = "Email: " + rhit.fbAuthManager.email;
 		document.querySelector("#profileUsername").innerHTML = "Username: " + rhit.fbAuthManager.username;
 		console.log(rhit.fbAuthManager.email);
+		document.querySelector("#wishListButton").onclick = (event) => {
+			window.location.href = `wishlistPage.html`;
+		};
 	}
 }
 
@@ -454,6 +457,54 @@ rhit.GameLibPageController = class {
 		} else {
 			rhit.get64BitId(895713836);
 		}
+	}
+}
+
+rhit.WishlistPageController = class {
+	constructor() {
+		this.updateView();
+	}
+
+	updateView() {
+		if (!rhit.fbAuthManager.isSignedIn) {
+			console.log("You need to login first");
+		}
+		this._ref = firebase.firestore().collection("WishList");
+		let query = this._ref.limit(50);
+		console.log("uid:", rhit.fbAuthManager.uid);
+		if (rhit.fbAuthManager.uid) {
+			console.log("should update query");
+			query = query.where("author", "==", rhit.fbAuthManager.uid);
+		}
+		console.log("wishlist:", this._ref);
+		console.log("query:", query);
+		let appID = "10";
+		let title = "Nothing";
+		let plain = "";
+
+		query.get()
+			.then(function (querySnapshot) {
+				const newList = htmlToElement('<div id="gameListContainer"></div>');
+				var newCard = "";
+				querySnapshot.forEach(function (doc) {
+					console.log(doc.id, " => ", doc.data());
+					appID = doc.data().appId;
+					title = doc.data().Title;
+					plain = doc.data().plain;
+					newCard = rhit.createCardTitleAndImage(title, rhit.getImageForGame(appID));
+				});
+				newList.appendChild(newCard);
+
+				const oldList = document.querySelector("#wishlistTitle");
+				oldList.removeAttribute("id");
+				oldList.hidden = true;
+				oldList.parentElement.appendChild(newList);
+			})
+			.catch(function (error) {
+				console.log("Error getting documents: ", error);
+			});
+		console.log("title:", title);
+
 	}
 }
 
@@ -537,6 +588,11 @@ rhit.initializePage = function () {
 
 	if (document.querySelector("#loginPage")) {
 		console.log("You are on the login page");
+	}
+
+	if (document.querySelector("#wishlistPage")) {
+		console.log("You are on the wishlist page");
+		new rhit.WishlistPageController();
 	}
 
 	if (document.querySelector("#createAccountButton") != null) {
